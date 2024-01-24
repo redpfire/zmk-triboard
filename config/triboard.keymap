@@ -18,13 +18,14 @@
 #define BASE 0
 #define SYM 1
 #define NAV 2
-#define ADJ 3
+#define VIM 3
+#define FUN 4
 
 &mt {
   quick-tap-ms = <100>;
   global-quick-tap;
   flavor = "hold-preferred";
-  tapping-term-ms = <170>;
+  tapping-term-ms = <200>;
 };
 
 // Urob's timeless home row mods: see https://github.com/urob/zmk-config#timeless-homerow-mods
@@ -64,22 +65,134 @@ ZMK_BEHAVIOR(tdbtclr, tap_dance,
   quick-tap-ms = <100>;
   global-quick-tap;
   flavor = "hold-preferred";
-  tapping-term-ms = <170>;
+  tapping-term-ms = <200>;
+};
+
+&sl {
+    release-after-ms = <1500>;
+};
+
+&caps_word {
+    continue-list = <BSPC MINUS UNDERSCORE>;
 };
 
 / {
-    macros {
-            gif: gif {
-                label = "giphy";
-                compatible = "zmk,behavior-macro";
-                #binding-cells = <0>;
-                bindings
-                    = <&macro_press &kp LSHFT>
-                    , <&macro_tap &kp N2>
-                    , <&macro_release &kp LSHFT>
-                    , <&macro_tap &kp G &kp I &kp F>
-                    ;
-            };
+    behaviors {
+        td0: tap_dance_dquote {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp SQT>, <&kp DQT>;
+        };
+        td1: tap_dance_semi {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp SEMI>, <&kp COLON>;
+        };
+        td2: tap_dance_backslash {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp BSLH>, <&kp PIPE>;
+        };
+        td3: tap_dance_equal {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp EQUAL>, <&kp PLUS>;
+        };
+        td4: tap_dance_minus {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp MINUS>, <&kp UNDER>;
+        };
+        td5: tap_dance_grave {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp TILDE>, <&kp GRAVE>;
+        };
+        td6: tap_dance_brace_left {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp LPAR>, <&kp LBKT>, <&kp LBRC>;
+        };
+        td7: tap_dance_brace_right {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&kp RPAR>, <&kp RBKT>, <&kp RBRC>;
+        };
+        tdb: tap_dance_bl_clear {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&none>, <&none>, <&bt BT_CLR>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_bl_clear {
+            timeout-ms = <100>;
+            key-positions = <0 1>;
+            bindings = <&tdb>;
+        };
+
+        combo_osl_numbers {
+            timeout-ms = <350>;
+            key-positions = <17 18>; // E I
+            bindings = <&sl SYM>;
+        };
+        combo_osl_fun {
+            timeout-ms = <350>;
+            key-positions = <26 27>; // H ,
+            bindings = <&sl FUN>;
+        };
+        combo_osl_vim {
+            timeout-ms = <350>;
+            key-positions = <27 28>; // , .
+            bindings = <&sl VIM>;
+        };
+
+        combo_dquote {
+            timeout-ms = <50>;
+            key-positions = <12 13>; // S T
+            bindings = <&kp DQT>;
+        };
+        combo_quote {
+            timeout-ms = <50>;
+            key-positions = <16 17>; // N E
+            bindings = <&kp SQT>;
+        };
+        combo_del {
+            timeout-ms = <50>;
+            key-positions = <12 14>; // S G
+            bindings = <&kp DEL>;
+        };
+        combo_home {
+            timeout-ms = <50>;
+            key-positions = <14 15>; // G M
+            bindings = <&kp HOME>;
+        };
+        combo_end {
+            timeout-ms = <50>;
+            key-positions = <24 25>; // V K
+            bindings = <&kp END>;
+        };
+        combo_esc {
+            timeout-ms = <50>;
+            key-positions = <13 14>; // T G
+            bindings = <&kp ESC>;
+        };
+        combo_capsword {
+            timeout-ms = <50>;
+            key-positions = <21 23>; // X D
+            bindings = <&caps_word>;
+        };
     };
         keymap {
                 compatible = "zmk,keymap";
@@ -88,19 +201,19 @@ ZMK_BEHAVIOR(tdbtclr, tap_dance,
                 base_layer {
 label= "BASE";
 // ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
-// ┃     Q     ┃     W     ┃     F     ┃     P     ┃     B     ┃   ┃     J     ┃     L     ┃     U     ┃     Y     ┃     ;     ┃
+// ┃     Q     ┃     W     ┃     F     ┃     P     ┃     B     ┃   ┃     J     ┃     L     ┃     U     ┃     Y     ┃     -     ┃
 // ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-// ┃     A     ┃     R     ┃     S     ┃     T     ┃     D     ┃   ┃     H     ┃     N     ┃     E     ┃     I     ┃     O     ┃
+// ┃     A     ┃     R     ┃     S     ┃     T     ┃     G     ┃   ┃     M     ┃     N     ┃     E     ┃     I     ┃     O     ┃
 // ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-// ┃     Z     ┃     X     ┃     C     ┃     G     ┃     V     ┃   ┃     K     ┃     M     ┃     ,     ┃     .     ┃     /     ┃
+// ┃     Z     ┃     X     ┃     C     ┃     D     ┃     V     ┃   ┃     K     ┃     H     ┃     ,     ┃     .     ┃     /     ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┛
-//                         ┃           ┃    TAB    ┃    SPC    ┃   ┃    BSPC   ┃    ENT    ┃           ┃
+//                         ┃           ┃    TAB    ┃    SPC    ┃   ┃   BSPC    ┃    ENT    ┃           ┃
 //                         ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
-     &kp Q        &kp W        &kp F       &kp P       &kp B           &kp J       &kp L       &kp U       &kp Y        &kp SEMI
-     &hml LCTRL A &hml LGUI R  &kp S       &kp T       &kp D           &kp H       &kp N       &kp E       &hmr LGUI I  &hmr LCTRL O
-     &kp Z        &kp X        &kp C       &kp G       &kp V           &kp K       &kp M       &kp COMMA   &kp DOT      &kp FSLH
-                               &none   &mt LSHFT TAB   &lt SYM SPACE   &kp BSPC    &lt NAV RET &none
+     &kp Q        &kp W        &kp F       &kp P       &hml LGUI B           &hmr RGUI J       &kp L       &kp U       &kp Y        &td4
+     &kp A &kp R  &hml RALT S        &hml LCTRL T       &kp G           &kp M       &hmr RCTRL N       &hmr RALT E       &kp I  &kp O
+     &kp Z        &kp X        &kp C       &hml LALT D       &kp V           &kp K       &hmr LALT H       &kp COMMA   &kp DOT      &kp FSLH
+                               &none   &mt LSHFT TAB   &lt NAV SPACE   &kp BSPC    &mt LSHFT RET &none
                         >;
                 };
 
@@ -112,19 +225,19 @@ label= "BASE";
 label= "SYM";
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
-//             ┃    ESC    ┃     @     ┃     &     ┃     $     ┃     %     ┃   ┃     ^     ┃     =     ┃     +     ┃  F13 -> é ┃  F14 -> è ┃
+//             ┃     !     ┃     @     ┃     #     ┃     $     ┃     %     ┃   ┃     ^     ┃     &     ┃     *     ┃  LBRACES  ┃  RBRACES  ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃     #     ┃     (     ┃     {     ┃     [     ┃     -     ┃   ┃     \     ┃     ]     ┃     }     ┃     )     ┃     |     ┃
+//             ┃     1     ┃     2     ┃     3     ┃     4     ┃     5     ┃   ┃     6     ┃     7     ┃     8     ┃     9     ┃     0     ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃ F17 -> ç  ┃     *     ┃     '     ┃     "     ┃     _     ┃   ┃     `     ┃     ~     ┃     !     ┃  F15 -> à ┃  F16 -> ^ ┃
+//             ┃   ~ `     ┃    \ |    ┃    = +    ┃     -     ┃     _     ┃   ┃    ' "    ┃    ; :    ┃    , <    ┃    . >    ┃    / ?    ┃
 //             ┗━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┛
 //                                     ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
-    &kp ESC         &kp AT_SIGN      &kp AMPERSAND    &kp DOLLAR     &kp PERCENT           &kp CARET  &kp EQUAL  &kp PLUS  &kp F13          &kp F14
-    &hml LCTRL HASH &hml LGUI LPAR   &kp LBRC         &kp LBKT       &kp MINUS             &kp BSLH   &kp RBKT   &kp RBRC  &hml LGUI RPAR   &hml LCTRL PIPE
-    &kp F17         &kp ASTERISK     &kp SQT          &kp DQT        &kp UNDERSCORE        &kp GRAVE  &kp TILDE  &kp EXCL  &kp F15          &kp F16
-                                     &trans           &trans         &trans                &kp DEL    &trans     &trans
+    &kp EXCL        &kp AT_SIGN      &kp HASH         &kp DOLLAR     &kp PERCENT           &kp CARET  &kp AMPERSAND &kp ASTRK &td6             &td7
+    &kp N1          &kp N2           &kp N3           &hml LCTRL N4  &kp N5                &hmr RCTRL N6 &kp N7  &kp N8    &kp N9           &kp N0
+    &td5            &td2     &td3             &kp MINUS           &kp UNDERSCORE        &td0       &td1       &trans  &trans          &trans
+                                     &trans           &trans         &trans                &trans     &trans     &trans
                         >;
                 };
 
@@ -136,29 +249,54 @@ label= "SYM";
 label= "NAV";
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓                          ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
-//             ┃     1     ┃     2     ┃     3     ┃     4     ┃     5     ┃                          ┃     6     ┃     7     ┃     8     ┃     9     ┃     0     ┃
+//             ┃    F1     ┃    F2     ┃   F3      ┃   F4      ┃    F5     ┃                          ┃    F6     ┃    F7     ┃    F8     ┃    F9     ┃    F10    ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫                          ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃   CTRL    ┃    GUI    ┃    ◂◂     ┃     ▸▸    ┃           ┃                          ┃           ┃     ←     ┃     ↑     ┃     →     ┃     ↓     ┃
+//             ┃           ┃           ┃    ◂◂     ┃     ▸▸    ┃           ┃                          ┃     ←     ┃     ↓     ┃     ↑     ┃     →     ┃    F11    ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫                          ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃ F18 -> ù  ┃          ┃          ┃    ▸▮▮    ┃           ┃                          ┃           ┃     ⇤     ┃    PDN    ┃    PUP    ┃     ⇥     ┃
+//             ┃           ┃          ┃          ┃    ▸▮▮    ┃           ┃                          ┃           ┃   PG_DN   ┃  PG_UP    ┃           ┃    F12    ┃
 //             ┗━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫                          ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┛
 //                                     ┃           ┃           ┃           ┃                          ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛                          ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
 //             ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
-                &kp N1        &kp N2               &kp N3             &kp N4      &kp N5                &kp N6      &kp N7      &kp N8      &kp N9      &kp N0
-                &kp LCTRL     &kp LGUI             &kp C_PREVIOUS     &kp C_NEXT  &none                 &kp LCTRL   &kp LEFT    &kp UP      &kp DOWN    &kp RIGHT
-                &kp F18       &kp C_VOLUME_DOWN    &kp C_VOLUME_UP    &kp C_PP    &none                 &kp LGUI    &kp HOME    &kp PG_UP   &kp PG_DN   &kp END
-                                                   &trans             &trans      &mo ADJ               &trans      &trans      &trans
+                &kp F1        &kp F2               &kp F3             &kp F4      &kp F5                &kp F6      &kp F6      &kp F8      &kp F9      &kp F10
+                &none         &none                &kp C_PREVIOUS     &kp C_NEXT  &none                 &kp LEFT   &kp DOWN  &kp UP        &kp RIGHT   &kp F11
+                &none         &kp C_VOLUME_DOWN    &kp C_VOLUME_UP    &kp C_PP    &none                 &none       &kp PG_DN   &kp PG_UP       &none       &kp F12
+                                                   &trans             &trans      &mo FUN               &trans      &trans      &trans
                         >;
                 };
 
 // ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 
 
-                adjust_layer {
+                vim_layer {
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-label= "ADJ"                               ;
+label= "VIM";
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+//             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓                          ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
+//             ┃           ┃           ┃           ┃           ┃           ┃                          ┃           ┃           ┃           ┃           ┃           ┃
+//             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫                          ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
+//             ┃           ┃     L     ┃     K     ┃    J      ┃    H      ┃                          ┃           ┃           ┃           ┃           ┃           ┃
+//             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫                          ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
+//             ┃           ┃           ┃           ┃           ┃           ┃                          ┃           ┃           ┃           ┃           ┃           ┃
+//             ┗━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫                          ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┛
+//                                     ┃           ┃           ┃           ┃                          ┃           ┃           ┃           ┃
+//                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛                          ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
+ bindings = <
+//             ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
+                &none         &none                &none              &none       &none                 &none       &none       &none       &none       &none
+                &none         &kp L                &kp K              &kp J       &kp H                 &none       &none       &none       &none       &none
+                &none         &none                &none              &none       &none                 &none       &none       &none       &none       &none
+                                                   &trans             &trans      &trans                 &trans      &trans      &trans
+                        >;
+                };
+
+// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+
+
+                fun_layer {
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+label= "FUN"                               ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
 //             ┃   RESET   ┃ OUT TOG   ┃ BT CLEAR  ┃           ┃           ┃   ┃           ┃    F7     ┃    F8     ┃    F9     ┃    F12    ┃
@@ -173,9 +311,9 @@ label= "ADJ"                               ;
 //             ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
                 &sys_reset  &out OUT_TOG  &tdbtclr     &trans      &trans          &trans      &kp F7      &kp F8      &kp F9      &kp F12
-                &bootloader &bt BT_SEL 0  &kp LCTRL    &kp LGUI    &trans          &trans      &kp F4      &kp F5      &kp F6      &kp F11  
-                &trans      &bt BT_SEL 1  &bt BT_SEL 2 &kp LALT    &trans          &trans      &kp F1      &kp F2      &kp F3      &kp F10 
-                                          &trans       &trans      &trans          &trans      &trans      &trans      
+                &bootloader &bt BT_SEL 0  &kp LCTRL    &kp LGUI    &trans          &trans      &kp F4      &kp F5      &kp F6      &kp F11
+                &trans      &bt BT_SEL 1  &bt BT_SEL 2 &kp LALT    &trans          &trans      &kp F1      &kp F2      &kp F3      &kp F10
+                                          &trans       &trans      &trans          &trans      &trans      &trans
                         >;
                 };
         };
